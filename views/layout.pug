@@ -1,0 +1,26 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js')
+  body
+    
+    nav.navbar.navbar-default
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href='/') Menu
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-expanded='false')
+            span.sr-only
+  
+        .collapse.navbar-collapse#navbarSupportedContent
+          ul.nav.navbar-nav
+            li.nav-item.active
+              a.nav-link(href='/') Home
+              span.sr-only
+            li.nav-item
+              a.nav-link(href='/create') Add to Direcory
+      
+    block content

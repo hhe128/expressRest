@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1= title
+  table#employee
+    tr
+      th Id
+      th Name
+      th Role
+      th Hire Date
+      br
+      - employee_list.sort(function(a, b) { return (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0;});
+      each emp in employee_list
+        tr
+          td #{emp.id}
+          td #{emp.firstName} #{emp.lastName} 
+          td #{emp.role} 
+          td #{emp.hireDate}
+    
+      else
+        tr 
+          td There are no emp.
+  
+  br
+  a(class='button' href='create') Create

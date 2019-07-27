@@ -1,0 +1,87 @@
+extends layout
+
+block content
+    script.
+      $(document).ready(function(){
+      $("#div1").load("https://icanhazdadjoke.com p.subtitle");
+      //$("#div2").load("https://ron-swanson-quotes.herokuapp.com/v2/quotes");
+      $.getJSON("https://ron-swanson-quotes.herokuapp.com/v2/quotes", function(data){
+        console.log(data[0]);
+        $("#div2").html(data[0]);
+        });
+      });
+
+    div
+        br
+
+    script.
+        const formToJSON = function(elements) { 
+            var data = {};
+            console.log(elements);
+            for ( var i = 0; i <  elements.length; i++ ) {
+                if ( elements[i].name ) {
+                    data[elements[i].name] = elements[i].value;
+                }
+            }
+            return data;
+
+        };
+        
+
+        function formlistner() {
+
+            // Stop the form from submitting since we’re handling that with AJAX.
+            event.preventDefault();
+            var form = document.getElementById('create-form');
+            // Call our function to get the form data.
+            console.log(form.elements);
+            var data = formToJSON(form.elements);
+            var joke = document.getElementById('div1').firstChild.innerHTML;
+            data.joke = joke;
+            var quote = document.getElementById('div2').innerHTML;
+            data.quote = quote;
+            //var postData = JSON.stringify(data);
+            var posting = $.post("/api/employees", data);
+            posting.done(function(result, status){
+              document.getElementById('div3').firstChild.innerHTML = result;
+              console.log("Result: " + result + "\nStatus: " + status);
+            });
+            posting.fail(function(result, status) {
+              var node = document.getElementById('div3').firstChild;
+              node.style.color = 'red';
+              node.innerHTML = status.toUpperCase()+" "+result.status+" : "+result.responseText;
+              console.log("Result: " + JSON.stringify(result)+ "\nStatus: " + status);
+            });
+        }
+
+    .main.container
+    .row
+      .col-md-6.col-md-offset-0
+        h1.display-4.m-b-2= title
+
+        #div3
+            h3(style={color: 'green'})
+
+        #div1
+            p Let jQuery AJAX Change This Text for joke
+        #div2
+            p Let jQuery AJAX Change This Text for Quote
+        br    
+        // creation form
+        form#create-form(method='POST' action='/api/employees' onsubmit="formlistner();")
+          div.form-group
+            label(for='firstname') First Name:
+            input#name.form-control(type='text', placeholder='first name' name='firstname' required)
+          div.form-group
+            label(for='lastname') Last Name:
+            input#email.form-control(type='text', placeholder='last name' name='lastname' required)
+          div.custom-select
+            label(for='title') Title:
+            select(name='title')
+                - var etitles = [ 'CEO', 'VP', 'Manager', 'LACKEY']
+                each til in etitles
+                    option(value=til) #{til}
+          br
+          button.btn.btn-primary(type='submit') Add
+     
+          
